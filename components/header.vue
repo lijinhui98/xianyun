@@ -17,17 +17,19 @@
       <!-- 登录状态 -->
       <el-row>
         <!-- 下拉菜单 -->
-        <el-dropdown v-if="false">
+        <el-dropdown v-if="$store.state.user.userInfo.token">
           <span class="el-dropdown-link">
-            <img src="http://157.122.54.189:9095/assets/images/avatar.jpg" alt>
+            <img :src="$axios.defaults.baseURL + $store.state.user.userInfo.user.defaultAvatar" alt>
 
-            <span>skycode</span>
+            <span>{{$store.state.user.userInfo.user.nickname}}</span>
 
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>个人中心</el-dropdown-item>
-            <el-dropdown-item>退出</el-dropdown-item>
+            <el-dropdown-item>
+              <div style="width:100%t" @click="handleLogout">退出</div>
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
 
@@ -41,8 +43,24 @@
 
 <script>
   export default {
-    mounted(){
-      console.log(this.$store.state.user.userInfo.token);
+    mounted() {
+      // console.log(this.$store.state);
+    },
+    methods: {
+      // 退出
+      handleLogout() {
+        // const { commit } = this.$store;
+        // commit("user/cleanUserInfo");
+
+        this.$store.commit("user/clearUserInfo");
+        this.$message({
+          message: "退出成功",
+          type: "success"
+        });
+        setTimeout(() => {
+          this.$router.push("/user/login");
+        }, 1000);
+      }
     }
   };
 </script>
